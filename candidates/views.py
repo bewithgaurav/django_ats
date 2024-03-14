@@ -15,13 +15,25 @@ class CandidateViewSet(viewsets.ModelViewSet):
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['name', 'phone_number', 'email']
+    search_fields = ['name', 'phone_number', 'email', 'status', 'current_salary', 'expected_salary', 'years_of_exp', 'age']
 
 from rest_framework import generics
 from .models import Candidate
 from .serializers import CandidateSerializer
 from rest_framework.response import Response
 from rest_framework import status
+
+
+class CandidateAPIView(generics.ListCreateAPIView):
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 class CandidateSearchAPIView(generics.ListAPIView):
     serializer_class = CandidateSerializer
@@ -38,7 +50,7 @@ class CandidateSearchAPIView(generics.ListAPIView):
         phone_number = self.request.query_params.get('phone_number')
         email = self.request.query_params.get('email')
         name = self.request.query_params.get('name')
-
+        print("HIIII")
         if expected_salary_min:
             queryset = queryset.filter(expected_salary__gte=expected_salary_min)
         if expected_salary_max:

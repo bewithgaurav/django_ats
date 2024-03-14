@@ -25,15 +25,31 @@ curl --location --request POST 'http://localhost:8000/candidates/' \
 }'
 ```
 
-# Name-based Search
+# Search
+1. Search for all candidates whose expected salary is between 8 to 12:
+   ```bash
+   curl --location --request GET 'http://localhost:8000/candidates/search?expected_salary_min=8&expected_salary_max=12'
+   ```
 
-- **Endpoint:** `/name_search/{query}/`
-- **Method:** GET
+2. Search for candidates with age between 21 to 30 and years of experience more than 3:
+   ```bash
+   curl --location --request GET 'http://localhost:8000/candidates/search?age_min=21&age_max=30&years_of_exp_min=3'
+   ```
 
-#### Example Curl
-```bash
-curl --location --request GET 'http://localhost:8000/name_search/Ajay%20Kumar%20yadav'
-```
+3. Search for candidates based on their phone number:
+   ```bash
+   curl --location --request GET 'http://localhost:8000/candidates/search?phone_number=1234567890'
+   ```
+
+4. Search for candidates based on their email:
+   ```bash
+   curl --location --request GET 'http://localhost:8000/candidates/search?email=john@example.com'
+   ```
+
+5. Search for candidates whose name contains "John Doe":
+   ```bash
+   curl --location --request GET 'http://localhost:8000/candidates/search?name=John%20Doe'
+   ```
 
 ## Usage
 
